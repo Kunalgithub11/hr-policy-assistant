@@ -5,7 +5,7 @@ Creates complete graph with 8 nodes and conditional routing
 
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
-from langchain_core.language_model import BaseLanguageModel
+from langchain_core.language_models import BaseLanguageModel
 import chromadb
 
 from state import CapstoneState
