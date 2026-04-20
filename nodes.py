@@ -5,7 +5,7 @@ Implements all 8 nodes: memory, router, retrieval, skip, tool, answer, eval, sav
 
 import re
 from typing import Any
-from langchain_core.language_model import BaseLanguageModel
+from langchain_core.language_models import BaseLanguageModel
 import chromadb
 from state import CapstoneState
 from rag import retrieve_documents
