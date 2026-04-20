@@ -3,6 +3,11 @@ Streamlit UI for HR Policy Assistant
 Chat interface with memory persistence and sidebar information
 """
 
+# Suppress transformers warnings about vision models not needed for text-only app
+import warnings
+warnings.filterwarnings("ignore", message=".*torchvision.*")
+warnings.filterwarnings("ignore", category=UserWarning, module="transformers")
+
 import streamlit as st
 import os
 import uuid
