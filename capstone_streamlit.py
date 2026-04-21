@@ -247,6 +247,7 @@ if user_input:
             print("=" * 80)
             
             st.error(f"❌ Error: {error_msg}")
+            st.code(tb)  # Show full traceback
             st.session_state.messages.pop()  # Remove user message on error
 
 
