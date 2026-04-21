@@ -12,7 +12,11 @@ import streamlit as st
 import os
 import uuid
 from datetime import datetime
+from dotenv import load_dotenv
 from agent import HRPolicyAgent
+
+# Load .env file for local development (Streamlit Cloud uses st.secrets)
+load_dotenv()
 
 
 # Page configuration

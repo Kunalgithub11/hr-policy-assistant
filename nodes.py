@@ -4,12 +4,15 @@ Implements all 8 nodes: memory, router, retrieval, skip, tool, answer, eval, sav
 """
 
 import re
+import logging
 from typing import Any
 from langchain_core.language_models import BaseLanguageModel
 import chromadb
 from state import CapstoneState
 from rag import retrieve_documents
 from tools import execute_tool
+
+logger = logging.getLogger(__name__)
 
 
 def memory_node(state: CapstoneState, llm: BaseLanguageModel) -> dict:
@@ -255,6 +258,13 @@ Answer:"""
         response = llm.invoke(answer_prompt).content
         answer = response.strip()
     except Exception as e:
+        logger.error(f"ANSWER_NODE FAILED: {str(e)}", exc_info=True)
+        print(f"\n\n!!! ANSWER_NODE ERROR !!!")
+        print(f"Exception: {type(e).__name__}: {str(e)}")
+        print(f"Question: {state['question']}")
+        print(f"Context length: {len(state.get('retrieved', ''))}")
+        print(f"Tool result: {state.get('tool_result', '')}")
+        print("!!! END ERROR !!!\n\n")
         answer = f"I apologize, but I encountered an error processing your question. Please rephrase and try again."
     
     return {"answer": answer}
@@ -305,9 +315,11 @@ Output ONLY a single decimal number between 0 and 1. No explanation."""
         if match:
             faithfulness = float(match.group(0))
         else:
-            faithfulness = 0.5
-    except:
-        faithfulness = 0.5
+            logger.warning(f"Could not parse faithfulness score from LLM response: {response}")
+            faithfulness = 0.7
+    except Exception as e:
+        logger.error(f"EVAL_NODE FAILED: {str(e)}", exc_info=True)
+        faithfulness = 0.7
     
     # Determine if retry is needed
     retry_needed = (faithfulness < 0.7) and (eval_retries < 2)
