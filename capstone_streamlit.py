@@ -235,7 +235,18 @@ if user_input:
                             st.write(f"- {source.get('topic', 'Unknown')} (Rank #{source.get('rank', 0)})")
         
         except Exception as e:
-            st.error(f"Error: {str(e)}")
+            import traceback
+            error_msg = str(e)
+            tb = traceback.format_exc()
+            
+            # Log full error for debugging
+            print("=" * 80)
+            print("AGENT ERROR:")
+            print(error_msg)
+            print(tb)
+            print("=" * 80)
+            
+            st.error(f"❌ Error: {error_msg}")
             st.session_state.messages.pop()  # Remove user message on error
 
 
