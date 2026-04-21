@@ -55,7 +55,17 @@ if "thread_id" not in st.session_state:
     st.session_state.thread_id = str(uuid.uuid4())
 
 if "agent" not in st.session_state:
-    api_key = os.getenv("GROQ_API_KEY")
+    # Try to get API key from Streamlit secrets (cloud) or environment (local)
+    api_key = None
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+    except (KeyError, FileNotFoundError):
+        api_key = os.getenv("GROQ_API_KEY")
+    
+    if not api_key:
+        st.error("⚠️ Groq API key not found. Please add GROQ_API_KEY to Streamlit Secrets.")
+        st.stop()
+    
     try:
         st.session_state.agent = HRPolicyAgent(api_key)
     except Exception as e:
