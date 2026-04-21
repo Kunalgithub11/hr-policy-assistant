@@ -30,13 +30,13 @@ class HRPolicyAgent:
         if groq_api_key:
             self.llm = ChatGroq(
                 api_key=groq_api_key,
-                model="mixtral-8x7b-32768",
+                model="llama-3.3-70b-versatile",
                 temperature=0.3
             )
         else:
             # Fallback to default Groq (expects env variable)
             self.llm = ChatGroq(
-                model="mixtral-8x7b-32768",
+                model="llama-3.3-70b-versatile",
                 temperature=0.3
             )
         
